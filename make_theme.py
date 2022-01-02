@@ -2,7 +2,7 @@
 
 
 from pprint import pp
-from typing import Tuple
+from typing import Callable, Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -53,10 +53,10 @@ class Themer:
 
         self._theme = pd.DataFrame()
 
-    # TODO: allow for use of cosine
     def _measure(
         self,
         luv: Tuple[float, float, float],
+        mode: Callable = euclidean,
         bright_mode: int = 1,  # 0 = all, 1 = bright only, 2 = muted
         nearest: bool = True,
     ):
@@ -76,7 +76,7 @@ class Themer:
             raise ValueError(
                 f"Unexpected value for `bright_mode`: {bright_mode}"
             )
-        dist = ((colors[_LUV] - luv) ** 2).sum(axis=1).pow(0.5)
+        dist = colors[_LUV].apply(mode, v=luv, axis=1)
         if nearest:
             return colors.loc[dist.idxmin()]
         return colors.loc[dist.idxmax()]
