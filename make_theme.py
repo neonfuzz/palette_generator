@@ -6,10 +6,18 @@ from typing import Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
+from scipy.spatial.distance import cosine, euclidean
 
 from convert_colors import cieluv_to_hex, hex_to_everything
 
 
+_RGB = ["R", "G", "B"]
+_HSV = ["hue", "sat", "val"]
+_XYZ = ["X", "Y", "Z"]
+_LUV = ["L", "U", "V"]
+
+
+# TODO: fg, bg, accent, secondary
 class Themer:
     _ref = hex_to_everything(
         pd.Series(
@@ -43,21 +51,9 @@ class Themer:
             right_on="hex",
         )
 
-        self._theme = {
-            "red": None,
-            "yellow": None,
-            "green": None,
-            "cyan": None,
-            "blue": None,
-            "magenta": None,
-            "white": None,
-            "black": None,
-            "common": None,
-            "mean": None,
-        }
-        # TODO: refactor this as a DataFrame.
-        self._mix = {}
+        self._theme = pd.DataFrame()
 
+    # TODO: allow for use of cosine
     def _measure(
         self,
         luv: Tuple[float, float, float],
@@ -80,116 +76,75 @@ class Themer:
             raise ValueError(
                 f"Unexpected value for `bright_mode`: {bright_mode}"
             )
-        dist = ((colors[["L", "U", "V"]] - luv) ** 2).sum(axis=1).pow(0.5)
+        dist = ((colors[_LUV] - luv) ** 2).sum(axis=1).pow(0.5)
         if nearest:
             return colors.loc[dist.idxmin()]
         return colors.loc[dist.idxmax()]
 
-    def _mix_color_with_ref(self, ref: str, p=0.2):
-        if ref in self._mix:
-            return self._mix[ref]["hex"]
-        _ = self.theme
-        color = self._theme[ref][["L", "U", "V"]]
-        pure = self._ref.loc[ref][["L", "U", "V"]]
-        mixed_luv = (1 - p) * color + p * pure
+    def _get_mixed(self, ref, p=0.2, **kwargs):
+        # All in LUV space.
+        pure = self._ref.loc[ref][_LUV]
+        base = self._measure(pure, **kwargs)[_LUV]
+        mixed_luv = (1 - p) * base + p * pure
+
+        # Now to everything.
         hex_code = cieluv_to_hex(mixed_luv)
         mixed = hex_to_everything(pd.Series([hex_code])).iloc[0]
-        self._mix[ref] = mixed
-        return self._mix[ref]["hex"]
+        mixed.name = ref
+        return mixed
 
-    def _get_from_ref(self, ref: str, **kwargs) -> str:
-        if self._theme[ref] is not None:
-            return self._theme[ref]["hex"]
-        self._theme[ref] = self._measure(
-            self._ref.loc[ref][["L", "U", "V"]], **kwargs
-        )
-        return self._theme[ref]["hex"]
+    def _get_special(self, mode):
+        if mode == "common":
+            color = self.colors.iloc[0]
+        color.name = mode
+        return color
 
     @property
     def red(self) -> str:
-        return self._get_from_ref("red")
+        return self.theme.loc["red"]
 
     @property
     def yellow(self) -> str:
-        return self._get_from_ref("yellow")
+        return self.theme.loc["yellow"]
 
     @property
     def green(self) -> str:
-        return self._get_from_ref("green")
+        return self.theme.loc["green"]
 
     @property
     def cyan(self) -> str:
-        return self._get_from_ref("cyan")
+        return self.theme.loc["cyan"]
 
     @property
     def blue(self) -> str:
-        return self._get_from_ref("blue")
+        return self.theme.loc["blue"]
 
     @property
     def magenta(self) -> str:
-        return self._get_from_ref("magenta")
+        return self.theme.loc["magenta"]
 
     @property
     def white(self) -> str:
-        return self._get_from_ref("white", bright_mode=self.ALL)
+        return self.theme.loc["white"]
 
     @property
     def black(self) -> str:
-        return self._get_from_ref("black", bright_mode=self.ALL)
+        return self.theme.loc["black"]
 
     @property
     def common(self) -> str:
-        if self._theme["common"] is not None:
-            return self._theme["common"]["hex"]
-        self._theme["common"] = self.colors.iloc[0]
-        return self._theme["common"]["hex"]
+        return self.theme.loc["common"]
 
     @property
-    def mean(self) -> str:
-        if self._theme["mean"] is not None:
-            return self._theme["mean"]["hex"]
-        com = (
-            self.colors[["L", "U", "V"]]
-            .mul(self.colors["count"], axis=0)
-            .mean()
-            / self.colors["count"].sum()
-        )
-        hex_code = cieluv_to_hex(com)
-        color = hex_to_everything(pd.Series([hex_code])).iloc[0]
-        self._theme["mean"] = color
-        return self._theme["mean"]["hex"]
-
-    # TODO: Maybe accent can be determined by looking at which theme color
-    #       is furtherst from the mean of all the others? (leave one out)
-    #   Can this^ be done with pairwise distance, and does that speed up
-    #   the calculation?
-    #   and/OR!!!: measure cosine distance from mean.
-    #              scipy.spatial.distance.cosine
-    #              foo[luv].apply(cosine, v=foo[luv].mean(), axis=1)
-    @property
-    def theme(self) -> dict:
-        # Calculate all colors if they haven't been already.
-        _ = self.red
-        _ = self.yellow
-        _ = self.green
-        _ = self.cyan
-        _ = self.blue
-        _ = self.magenta
-        _ = self.white
-        _ = self.black
-        _ = self.common
-        _ = self.mean
-        return {k: v.loc["hex"] for k, v in self._theme.items()}
-
-    # TODO: Make this available through the api and hide `theme`.
-    @property
-    def mix(self) -> dict:
-        # Mix pure colors with theme colors.
-        if not self._mix:
+    def theme(self):
+        if self._theme.empty:
+            muted = ["white", "black"]
             for ref in self._ref.index:
-                _ = self._mix_color_with_ref(ref)
-            self._mix['common'] = self._theme['common']
-        return {k: v.loc['hex'] for k, v in self._mix.items()}
+                mode = self.MUTED if ref in muted else self.BRIGHT
+                color = self._get_mixed(ref, bright_mode=mode)
+                self._theme = self._theme.append(color)
+            self._theme = self._theme.append(self._get_special("common"))
+        return self._theme["hex"]
 
     def plot(self, mode="LUV", scale=30):
         x, y, z = list(mode)
@@ -209,13 +164,9 @@ class Themer:
 
         plt.show()
 
-    def save(self, fname="colors.txt", mix=False):
-        if mix:
-            colors = set(self.mix.values())
-        else:
-            colors = set(self.theme.values())
+    def save(self, fname="colors.txt"):
         with open(fname, "wt") as outfile:
-            for color in colors:
+            for color in self.theme.unique():
                 outfile.write(color)
                 outfile.write("\n")
 
@@ -223,12 +174,9 @@ class Themer:
 # TODO: command line args
 def main():
     theme = Themer()
-    print('True colors:')
     pp(theme.theme)
-    print('\nMixed colors:')
-    pp(theme.mix)
     theme.save()
-    theme.save('colors_mixed.txt', mix=True)
+    theme.save("colors.txt")
 
 
 if __name__ == "__main__":
