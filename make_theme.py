@@ -17,7 +17,6 @@ _XYZ = ["X", "Y", "Z"]
 _LUV = ["L", "U", "V"]
 
 
-# TODO: fg, bg, accent, secondary
 class Themer:
     _ref = hex_to_everything(
         pd.Series(
@@ -96,6 +95,40 @@ class Themer:
     def _get_special(self, mode):
         if mode == "common":
             color = self.colors.iloc[0]
+        elif mode == "mean":
+            color = self._measure(
+                self.colors[_LUV].mean(), bright_mode=self.ALL
+            )
+        elif mode == "fg":
+            color = self._measure(
+                self.colors.iloc[0][_LUV],
+                bright_mode=self.MUTED,
+                nearest=False,
+            )
+        elif mode == "bg":
+            color = self.colors.iloc[0]
+        elif mode == "accent":
+            # NOTE: Assumes common/mean/fg/bg have already been calc'd,
+            #       but will work either way.
+            #       Could get messy if 'accent' has already been calc'd,
+            #       but that shouldn't happen.
+            color = self._theme.loc[
+                self._theme[_LUV]
+                .apply(cosine, v=self._theme[_LUV].mean(), axis=1)
+                .idxmax()
+            ]
+        elif mode == "secondary":
+            try:
+                color = self._theme.loc[
+                    self._theme[_LUV]
+                    .apply(cosine, v=self._theme.loc["accent"][_LUV], axis=1)
+                    .idxmax()
+                ]
+            except KeyError:
+                # We should never get here, but just in case...
+                raise KeyError("Must calculate 'accent' before 'secondary'.")
+        else:
+            raise NotImplementedError(f"Mode '{mode}' not implemented.")
         color.name = mode
         return color
 
@@ -136,6 +169,26 @@ class Themer:
         return self.theme.loc["common"]
 
     @property
+    def mean(self) -> str:
+        return self.theme.loc["mean"]
+
+    @property
+    def fg(self) -> str:
+        return self.theme.loc["fg"]
+
+    @property
+    def bg(self) -> str:
+        return self.theme.loc["bg"]
+
+    @property
+    def accent(self) -> str:
+        return self.theme.loc["accent"]
+
+    @property
+    def secondary(self) -> str:
+        return self.theme.loc["secondary"]
+
+    @property
     def theme(self):
         if self._theme.empty:
             muted = ["white", "black"]
@@ -144,6 +197,11 @@ class Themer:
                 color = self._get_mixed(ref, bright_mode=mode)
                 self._theme = self._theme.append(color)
             self._theme = self._theme.append(self._get_special("common"))
+            self._theme = self._theme.append(self._get_special("mean"))
+            self._theme = self._theme.append(self._get_special("fg"))
+            self._theme = self._theme.append(self._get_special("bg"))
+            self._theme = self._theme.append(self._get_special("accent"))
+            self._theme = self._theme.append(self._get_special("secondary"))
         return self._theme["hex"]
 
     def plot(self, mode="LUV", scale=30):
