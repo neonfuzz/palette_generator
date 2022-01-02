@@ -1,6 +1,7 @@
 #!/bin/env python3
 
 
+import argparse
 from pprint import pp
 from typing import Callable, Tuple
 
@@ -10,6 +11,25 @@ from scipy.spatial.distance import cosine, euclidean
 
 from convert_colors import cieluv_to_hex, hex_to_everything
 
+
+PARSER = argparse.ArgumentParser(
+    description="Read a palette of colors, and turn it into a cohesive color "
+    "scheme. Prints suggested theme to screen and saves HEX codes to file."
+)
+PARSER.add_argument(
+    "-i",
+    "--infile",
+    default="color_hist.txt",
+    help="each line is '{N}: {C}' where {N} in the number of counts of color "
+    "{C}, which is provided as a HEX code. Default: 'color_hist.txt'",
+)
+PARSER.add_argument(
+    "-o",
+    "--outfile",
+    default="colors.txt",
+    help="Each line is a unique theme color, provided as a HEX code. "
+    "Default: 'colors.txt'",
+)
 
 _RGB = ["R", "G", "B"]
 _HSV = ["hue", "sat", "val"]
@@ -229,13 +249,12 @@ class Themer:
                 outfile.write("\n")
 
 
-# TODO: command line args
-def main():
-    theme = Themer()
+def main(args: argparse.Namespace):
+    theme = Themer(args.infile)
     pp(theme.theme)
-    theme.save()
-    theme.save("colors.txt")
+    theme.save(args.outfile)
 
 
 if __name__ == "__main__":
-    main()
+    ARGS = PARSER.parse_args()
+    main(ARGS)

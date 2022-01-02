@@ -11,7 +11,6 @@
     'color_hist.txt' <-
     -> 'colors.txt'
     # TODO:
-        command line arguments
         documentation
 `palette`
     img <-
