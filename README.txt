@@ -12,12 +12,15 @@
     -> 'colors.txt'
     # TODO:
         documentation
-`palette`
+        output the hex column as a json (as well as? instead of?) unique hex codes
+`gen_palette.py`
     img <-
     'colors.txt' <-
+    -> 'palette.png'
     # TODO:
-        dark colors with light text
-        keep colors in order
+        documentation
+        remove hard-coded path to font
+        option to read in json and put color names in output
     # STRETCH
-        can we pythonize this?
         text colors from theme
+        option for one- vs two-column palette
