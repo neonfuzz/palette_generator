@@ -57,9 +57,7 @@ class Themer:
     MUTED = 2
 
     def __init__(self, fname="color_hist.txt"):
-        colors = pd.read_csv(
-            fname, names=["count", "hex"], sep=": ", engine="python"
-        )
+        colors = pd.read_csv(fname)
         colors = colors.sort_values("count", ascending=False).reset_index(
             drop=True
         )

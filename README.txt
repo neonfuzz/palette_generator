@@ -1,12 +1,9 @@
-`extract_colors`
+`extract_colors.py`
     img <-
     ncolors <-
-    -> 'colors.txt'
     -> 'color_hist.txt'
     # TODO:
-        probably just return hist, not 'colors.txt'
-        can we pythonize this? it seems to work best with ncolors >= 512,
-            but PIL can't handle that.
+        documentation
 `make_theme.py`
     'color_hist.txt' <-
     -> 'colors.txt'
@@ -18,6 +15,7 @@
     'colors.txt' <-
     -> 'palette.png'
     # TODO:
+        refactor with `wand`, so as not to bloat dependencies
         documentation
         remove hard-coded path to font
         option to read in json and put color names in output
