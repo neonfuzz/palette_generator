@@ -57,8 +57,10 @@ def rgb_to_xyz(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
 
 def _var_rgb_prime(var: float) -> int:
     if var > 0.0031308:
-        return round((1.055 * (var ** (1 / 2.4)) - 0.055) * 255)
-    return round(12.92 * var * 255)
+        out = round((1.055 * (var ** (1 / 2.4)) - 0.055) * 255)
+    else:
+        out = round(12.92 * var * 255)
+    return min(out, 255)
 
 
 def xyz_to_rgb(xyz: Tuple[float, float, float]) -> Tuple[int, int, int]:
