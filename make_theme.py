@@ -82,6 +82,22 @@ class Themer:
         self._theme = pd.DataFrame()
         self.p_mix = p_mix
 
+    def _get_subset(self, bright_mode: int = 1):
+        # 0 = all, 1 = bright only, 2 = muted
+        if bright_mode == self.ALL:
+            return self.colors
+        if bright_mode == self.BRIGHT:
+            return self.colors[
+                (self.colors["sat"] > self.colors["sat"].quantile(0.5))
+                & (self.colors["val"] > self.colors["val"].quantile(0.5))
+            ]
+        if bright_mode == self.MUTED:
+            return self.colors[
+                (self.colors["sat"] < self.colors["sat"].quantile(0.5))
+                | (self.colors["val"] < self.colors["val"].quantile(0.5))
+            ]
+        raise ValueError(f"Unexpected value for `bright_mode`: {bright_mode}")
+
     def _measure(
         self,
         luv: Tuple[float, float, float],
@@ -89,22 +105,7 @@ class Themer:
         bright_mode: int = 1,  # 0 = all, 1 = bright only, 2 = muted
         nearest: bool = True,
     ):
-        if bright_mode == self.ALL:
-            colors = self.colors
-        elif bright_mode == self.BRIGHT:
-            colors = self.colors[
-                (self.colors["sat"] > self.colors["sat"].quantile(0.5))
-                & (self.colors["val"] > self.colors["val"].quantile(0.5))
-            ]
-        elif bright_mode == self.MUTED:
-            colors = self.colors[
-                (self.colors["sat"] < self.colors["sat"].quantile(0.5))
-                | (self.colors["val"] < self.colors["val"].quantile(0.5))
-            ]
-        else:
-            raise ValueError(
-                f"Unexpected value for `bright_mode`: {bright_mode}"
-            )
+        colors = self._get_subset(bright_mode)
         dist = colors[_LUV].apply(mode, v=luv, axis=1)
         if nearest:
             return colors.loc[dist.idxmin()]
@@ -138,15 +139,9 @@ class Themer:
         elif mode == "bg":
             color = self.colors.iloc[0]
         elif mode == "accent":
-            try:
-                color = self._measure(
-                    self._theme.loc["mean", _LUV],
-                    bright_mode=self.BRIGHT,
-                    nearest=False,
-                )
-            except KeyError:
-                # We should never get here, but just in case...
-                raise ValueError("Must calculate 'mean' before 'accent'.")
+            color = self.colors.loc[
+                self._get_subset(self.BRIGHT)["sat"].idxmax()
+            ]
         elif mode == "secondary":
             try:
                 color = self._measure(
