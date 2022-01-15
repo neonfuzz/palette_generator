@@ -7,7 +7,7 @@ from typing import Callable, Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from scipy.spatial.distance import cosine, euclidean
+from scipy.spatial.distance import euclidean
 
 from convert_colors import cieluv_to_hex, hex_to_everything
 
@@ -41,12 +41,13 @@ class Themer:
     _ref = hex_to_everything(
         pd.Series(
             {
-                "red": "#FF0000",
-                "yellow": "#FFFF00",
-                "green": "#00FF00",
-                "cyan": "#00FFFF",
-                "blue": "#0000FF",
-                "magenta": "#FF00FF",
+                # Based on xkcd color survey results.
+                "red": "#E50000",
+                "yellow": "#FFFF14",
+                "green": "#15B01A",
+                "cyan": "#13EAC9",  # xkcd "aqua"
+                "blue": "#0343DF",
+                "magenta": "#FF028D",  # xkcd "hot pink"
                 "white": "#FFFFFF",
                 "black": "#000000",
             }
@@ -126,25 +127,25 @@ class Themer:
         elif mode == "bg":
             color = self.colors.iloc[0]
         elif mode == "accent":
-            # NOTE: Assumes common/mean/fg/bg have already been calc'd,
-            #       but will work either way.
-            #       Could get messy if 'accent' has already been calc'd,
-            #       but that shouldn't happen.
-            color = self._theme.loc[
-                self._theme[_LUV]
-                .apply(cosine, v=self._theme[_LUV].mean(), axis=1)
-                .idxmax()
-            ]
-        elif mode == "secondary":
             try:
-                color = self._theme.loc[
-                    self._theme[_LUV]
-                    .apply(cosine, v=self._theme.loc["accent"][_LUV], axis=1)
-                    .idxmax()
-                ]
+                color = self._measure(
+                    self._theme.loc["mean", _LUV],
+                    bright_mode=self.BRIGHT,
+                    nearest=False,
+                )
             except KeyError:
                 # We should never get here, but just in case...
-                raise KeyError("Must calculate 'accent' before 'secondary'.")
+                raise ValueError("Must calculate 'mean' before 'accent'.")
+        elif mode == "secondary":
+            try:
+                color = self._measure(
+                    self._theme.loc["accent", _LUV],
+                    bright_mode=self.BRIGHT,
+                    nearest=False,
+                )
+            except KeyError:
+                # We should never get here, but just in case...
+                raise ValueError("Must calculate 'accent' before 'secondary'.")
         else:
             raise NotImplementedError(f"Mode '{mode}' not implemented.")
         color.name = mode
@@ -214,12 +215,15 @@ class Themer:
                 mode = self.MUTED if ref in muted else self.BRIGHT
                 color = self._get_mixed(ref, bright_mode=mode)
                 self._theme = self._theme.append(color)
-            self._theme = self._theme.append(self._get_special("common"))
-            self._theme = self._theme.append(self._get_special("mean"))
-            self._theme = self._theme.append(self._get_special("fg"))
-            self._theme = self._theme.append(self._get_special("bg"))
-            self._theme = self._theme.append(self._get_special("accent"))
-            self._theme = self._theme.append(self._get_special("secondary"))
+            for special in [
+                "common",
+                "mean",
+                "fg",
+                "bg",
+                "accent",
+                "secondary",
+            ]:
+                self._theme = self._theme.append(self._get_special(special))
         return self._theme["hex"]
 
     def plot(self, mode="LUV", scale=30):
