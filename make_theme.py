@@ -30,6 +30,16 @@ PARSER.add_argument(
     help="Each line is a unique theme color, provided as a HEX code. "
     "Default: 'colors.txt'",
 )
+PARSER.add_argument(
+    "-p",
+    "--p_mix",
+    default=0.25,
+    type=float,
+    help="Percent to mix pure color in with image colors to get 'red', "
+    "'yellow', 'green', 'cyan', 'blue', and 'magenta'. Recommend higher values"
+    " for homogeneous images and lower values for heterogeneous images. "
+    "Best results between 0.0 and 0.5. Default: 0.25",
+)
 
 _RGB = ["R", "G", "B"]
 _HSV = ["hue", "sat", "val"]
@@ -57,7 +67,7 @@ class Themer:
     BRIGHT = 1
     MUTED = 2
 
-    def __init__(self, fname="color_hist.txt"):
+    def __init__(self, fname="color_hist.txt", p_mix=0.25):
         colors = pd.read_csv(fname)
         colors = colors.sort_values("count", ascending=False).reset_index(
             drop=True
@@ -70,6 +80,7 @@ class Themer:
         )
 
         self._theme = pd.DataFrame()
+        self.p_mix = p_mix
 
     def _measure(
         self,
@@ -99,11 +110,11 @@ class Themer:
             return colors.loc[dist.idxmin()]
         return colors.loc[dist.idxmax()]
 
-    def _get_mixed(self, ref, p=0.2, **kwargs):
+    def _get_mixed(self, ref, **kwargs):
         # All in LUV space.
         pure = self._ref.loc[ref][_LUV]
         base = self._measure(pure, **kwargs)[_LUV]
-        mixed_luv = (1 - p) * base + p * pure
+        mixed_luv = (1 - self.p_mix) * base + self.p_mix * pure
 
         # Now to everything.
         hex_code = cieluv_to_hex(mixed_luv)
@@ -252,7 +263,7 @@ class Themer:
 
 
 def main(args: argparse.Namespace):
-    theme = Themer(args.infile)
+    theme = Themer(args.infile, p_mix=args.p_mix)
     pp(theme.theme)
     theme.save(args.outfile)
 
