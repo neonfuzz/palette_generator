@@ -36,9 +36,10 @@ PARSER.add_argument(
     default=0.25,
     type=float,
     help="Percent to mix pure color in with image colors to get 'red', "
-    "'yellow', 'green', 'cyan', 'blue', and 'magenta'. Recommend higher values"
-    " for homogeneous images and lower values for heterogeneous images. "
-    "Best results between 0.0 and 0.5. Default: 0.25",
+    "'yellow', 'green', 'cyan', 'blue', 'magenta', 'white', and 'black'. "
+    "Recommend higher values for homogeneous images and lower values for "
+    "heterogeneous images. Best results between 0.0 and 0.5. "
+    "Use 0.0 for colors true only to image. Default: 0.25",
 )
 
 _RGB = ["R", "G", "B"]
