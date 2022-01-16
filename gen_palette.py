@@ -1,5 +1,12 @@
 #!/bin/env python3
 
+"""
+Generate a palette image from a base image and set of colors.
+
+classes:
+    * :class:`Palette`: visual palette created on an image base
+"""
+
 
 import argparse
 
@@ -48,10 +55,35 @@ def _make_parser():
 
 
 class Palette:
-    def __init__(self, img_path, **kwargs):
+    """
+    Visual palette created on an image base.
+
+    Overlay color samples on image across the left and right of the image. If
+    the input is provided in '.json' format, also label the hex codes with the
+    names provided by the '.json'. If 'fg' and/or 'bg' are provided, they will
+    be used as the text color for the labels.
+
+    Args:
+        img_path (str): path to image
+        color_file (str): path to color file; default: 'colors.json'
+        outfile (str): path to saved image; default: 'palette.png'
+        cheight (int): height (in pixels) of a color swatch; default: 90
+        cwidth (int): width (in pixels) of a color swatch; default: 180
+        cwidth (int): margin (in pixels) between color swatches, also used for
+            corner radius; default: 10
+        font_family (str): font to use; default: 'Sarabun' else system default
+        font_size (int): font size for text; default: 28
+    """
+
+    def __init__(self, img_path: str, **kwargs):
+        """Initialize :class:`Palette`."""
+        #: path to saved image
         self.outfile = kwargs.pop("outfile", "palette.png")
+        #: height (in pixels) of a color swatch
         self.cheight = kwargs.pop("cheight", 90)
+        #: width (in pixels) of a color swatch
         self.cwidth = kwargs.pop("cwidth", 180)
+        #: margin (in pixels) between color swatches, also used for radius
         self.cmargin = kwargs.pop("cmargin", 10)
 
         self._read_colors(kwargs.pop("color_file", "colors.json"))
@@ -69,20 +101,30 @@ class Palette:
         self._draw(self.image)
 
     def _read_colors(self, color_path):
+        """Read colors from `color_path`."""
         if color_path.endswith(".json"):
+            #: colors loaded from `colorfile`
             self.colors = pd.read_json(color_path, typ="series")
         else:
             self.colors = pd.read_csv(color_path, header=None)[0]
 
     def show(self):
+        """Not Implemented."""
         raise NotImplementedError
         #  self.image.show()
 
-    def save(self, fname=None):
+    def save(self, fname: str = None):
+        """
+        Save the palette to image file.
+
+        Args:
+            fname (str): path to save; default: :const:`outfile`
+        """
         fname = fname or self.outfile
         self.image.save(filename=fname)
 
     def _scale_image(self):
+        """Scale image, in place, to palette size."""
         n_colors_per_col = int(np.ceil(len(self.colors) / 2))
         width, height = self.image.size
         new_height = (
@@ -93,6 +135,8 @@ class Palette:
         self.image.resize(new_width, new_height)
 
     def _add_color(self):
+        """Add the next color to the palette."""
+        # Calc constants.
         n_colors_per_col = int(np.ceil(len(self.colors) / 2))
         x_pos = self._colors_drawn // n_colors_per_col
         y_pos = self._colors_drawn % n_colors_per_col
@@ -102,12 +146,13 @@ class Palette:
             self.cmargin if x_pos == 0 else width - self.cmargin - self.cwidth
         )
         top = self.cmargin + y_pos * (self.cheight + self.cmargin)
-        label = (
+        label = (  # If colors have names, include them.
             None
             if self.colors.index.dtype == int
             else self.colors.index[self._colors_drawn]
         )
 
+        # Draw on the image.
         self._draw_rect(left, top, color=self.colors.iloc[self._colors_drawn])
         self._draw_text(
             left + self.cwidth // 2,
@@ -117,7 +162,15 @@ class Palette:
         )
         self._colors_drawn += 1
 
-    def _draw_rect(self, left, top, color):
+    def _draw_rect(self, left: int, top: int, color: str):
+        """
+        Draw a color swatch on the palette image.
+
+        Args:
+            left (int): left position, in pixels
+            top (int): top position, in pixels
+            color (str): color of swatch
+        """
         self._draw.fill_color = color
         self._draw.rectangle(
             left=left,
