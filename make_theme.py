@@ -12,36 +12,47 @@ from scipy.spatial.distance import euclidean
 from convert_colors import cieluv_to_hex, hex_to_everything
 
 
-PARSER = argparse.ArgumentParser(
-    description="Read a palette of colors, and turn it into a cohesive color "
-    "scheme. Prints suggested theme to screen and saves HEX codes to file."
-)
-PARSER.add_argument(
-    "-i",
-    "--infile",
-    default="color_hist.txt",
-    help="each line is '{N}: {C}' where {N} in the number of counts of color "
-    "{C}, which is provided as a HEX code. Default: 'color_hist.txt'",
-)
-PARSER.add_argument(
-    "-o",
-    "--outfile",
-    default="colors.json",
-    help="If extension is '.json', save as a one-line json with color names. "
-    "OR each line is a unique theme color, provided as a HEX code. "
-    "Default: 'colors.json'",
-)
-PARSER.add_argument(
-    "-p",
-    "--p_mix",
-    default=0.25,
-    type=float,
-    help="Percent to mix pure color in with image colors to get 'red', "
-    "'yellow', 'green', 'cyan', 'blue', 'magenta', 'white', and 'black'. "
-    "Recommend higher values for homogeneous images and lower values for "
-    "heterogeneous images. Best results between 0.0 and 0.5. "
-    "Use 0.0 for colors true only to image. Default: 0.25",
-)
+def _make_parser() -> argparse.ArgumentParser:
+    """
+    Create a CLI parser.
+
+    Returns:
+        argparse.ArgumentParser: argument parser
+    """
+    parser = argparse.ArgumentParser(
+        description="Read a palette of colors, and turn it into a cohesive "
+        "12-color scheme. Prints suggested theme to screen and saves HEX "
+        "codes to file."
+    )
+    parser.add_argument(
+        "-i",
+        "--infile",
+        default="color_hist.txt",
+        help="each line is '{N}: {C}' where {N} in the number of counts of "
+        "color {C}, which is provided as a HEX code. "
+        "Default: 'color_hist.txt'",
+    )
+    parser.add_argument(
+        "-o",
+        "--outfile",
+        default="colors.json",
+        help="If extension is '.json', save as a one-line json with color "
+        "names. OR each line is a unique theme color, provided as a HEX code. "
+        "Default: 'colors.json'",
+    )
+    parser.add_argument(
+        "-p",
+        "--p_mix",
+        default=0.25,
+        type=float,
+        help="Percent to mix pure color in with image colors to get 'red', "
+        "'yellow', 'green', 'cyan', 'blue', 'magenta', 'white', and 'black'. "
+        "Recommend higher values for homogeneous images and lower values for "
+        "heterogeneous images. Best results between 0.0 and 0.5. Use 0.0 for "
+        "colors true only to image. Default: 0.25",
+    )
+    return parser
+
 
 _RGB = ["R", "G", "B"]
 _HSV = ["hue", "sat", "val"]
@@ -234,5 +245,6 @@ def main(args: argparse.Namespace):
 
 
 if __name__ == "__main__":
+    PARSER = _make_parser()
     ARGS = PARSER.parse_args()
     main(ARGS)

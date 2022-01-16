@@ -12,37 +12,39 @@ from convert_colors import hex_to_rgb, rgb_to_hsv
 
 
 # TODO: option for one-col vs two-col palette
-PARSER = argparse.ArgumentParser(
-    description="Given an image and a list of colors, generate a graphical "
-    "representation of their palette."
-)
-PARSER.add_argument("img_path", help="The image.")
-PARSER.add_argument(
-    "-c",
-    "--color_file",
-    default="colors.json",
-    help="The palette colors. Can read .json or a plain list of color "
-    "hex codes. Default: 'colors.json'",
-)
-PARSER.add_argument(
-    "-o",
-    "--outfile",
-    default="palette.png",
-    help="The outfile. Default: 'palette.png'",
-)
-PARSER.add_argument(
-    "-ff",
-    "--font-family",
-    default="Sarabun",
-    help="Font family for text. Default: 'Sarabun'",
-)
-PARSER.add_argument(
-    "-fs",
-    "--font-size",
-    type=int,
-    default=28,
-    help="Font size for text. Default: 28",
-)
+def _make_parser():
+    parser = argparse.ArgumentParser(
+        description="Given an image and a list of colors, generate a "
+        "graphical representation of their palette."
+    )
+    parser.add_argument("img_path", help="The image.")
+    parser.add_argument(
+        "-c",
+        "--color_file",
+        default="colors.json",
+        help="The palette colors. Can read .json or a plain list of color "
+        "hex codes. Default: 'colors.json'",
+    )
+    parser.add_argument(
+        "-o",
+        "--outfile",
+        default="palette.png",
+        help="The outfile. Default: 'palette.png'",
+    )
+    parser.add_argument(
+        "-ff",
+        "--font-family",
+        default="Sarabun",
+        help="Font family for text. Default: 'Sarabun'",
+    )
+    parser.add_argument(
+        "-fs",
+        "--font-size",
+        type=int,
+        default=28,
+        help="Font size for text. Default: 28",
+    )
+    return parser
 
 
 class Palette:
@@ -126,44 +128,72 @@ class Palette:
         )
 
     def _make_font_colors(self):
+        """Define light and dark font colors, and threshold for choosing."""
+        # Choose "fg" if it exists, else "white".
         if self.colors.index.isin(["fg"]).any():
             _, _, fg_thresh = rgb_to_hsv(hex_to_rgb(self.colors.loc["fg"]))
             self._fg = self.colors.loc["fg"]
         else:
-            fg_thresh = 0.5
+            fg_thresh = 1
             self._fg = "white"
 
+        # Choose "bg" if it exists, else "black".
         if self.colors.index.isin(["bg"]).any():
             _, _, bg_thresh = rgb_to_hsv(hex_to_rgb(self.colors.loc["bg"]))
             self._bg = self.colors.loc["bg"]
         else:
-            bg_thresh = 0.5
+            bg_thresh = 0
             self._bg = "black"
 
+        # Define the value threshold as between the two.
         self._color_thresh = np.mean([fg_thresh, bg_thresh])
 
-    def _get_font_color(self, color):
+    def _get_font_color(self, color: str) -> str:
+        """
+        Find the best font color to label a color swatch.
+
+        Args:
+            color (str): the hexadecimal background of the swatch
+
+        Returns:
+            str: chosen font color
+        """
         _, _, val = rgb_to_hsv(hex_to_rgb(color))
         if val < self._color_thresh:
             return self._fg
         return self._bg
 
-    def _draw_text(self, text_x, text_y, color, label=None):
+    def _draw_text(
+        self, text_x: int, text_y: int, color: str, label: str = None
+    ):
+        """
+        Overlay text on a color swatch.
+
+        Args:
+            text_x (int): x-position of text center, in pixels
+            text_y (int): y-position of text center, in pixels
+            color (str): the hexadecimal color to write
+            label (str): name of the color; default: None
+        """
         font_size = int(self._draw.font_size)
+        # Determine literal text and its vertical offset.
         if label:
             text = f"{label}:\n{color}"
             v_offset = -font_size // 4  # T/B alignment.
         else:
             text = color
             v_offset = font_size // 3  # T/B alignment.
+        # Set some drawing defaults.
         self._draw.text_alignment = "center"  # L/R alignment.
         self._draw.gravity = "north"
         self._draw.text_interline_spacing = -font_size // 6
+        # Draw the text in the correct color.
         self._draw.fill_color = self._get_font_color(color)
         self._draw.text(text_x, text_y + v_offset, text)
 
 
 if __name__ == "__main__":
-    args = PARSER.parse_args()
-    palette = Palette(**vars(args))
-    palette.save()
+    PARSER = _make_parser()
+    ARGS = PARSER.parse_args()
+    PALETTE = Palette(**vars(ARGS))
+    PALETTE.save()

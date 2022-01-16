@@ -9,25 +9,27 @@ from convert_colors import rgb_to_hex
 
 
 # TODO: Describe how this is different from `make_palette`.
-PARSER = argparse.ArgumentParser(
-    description="Extract a pre-computed palette from an image."
-)
-PARSER.add_argument(
-    "img", help="The image file from which the palette is extracted."
-)
-PARSER.add_argument(
-    "--n-colors",
-    "-n",
-    default=512,
-    type=int,
-    help="The number of colors to extract. Default: 512",
-)
-PARSER.add_argument(
-    "--outfile",
-    "-o",
-    default="color_hist.txt",
-    help="The output of the script. Default: 'color_hist.txt'",
-)
+def _make_parser():
+    parser = argparse.ArgumentParser(
+        description="Extract a pre-computed palette from an image."
+    )
+    parser.add_argument(
+        "img", help="The image file from which the palette is extracted."
+    )
+    parser.add_argument(
+        "--n-colors",
+        "-n",
+        default=512,
+        type=int,
+        help="The number of colors to extract. Default: 512",
+    )
+    parser.add_argument(
+        "--outfile",
+        "-o",
+        default="color_hist.txt",
+        help="The output of the script. Default: 'color_hist.txt'",
+    )
+    return parser
 
 
 FNAME = "nordic.png"
@@ -56,6 +58,7 @@ def main(fname, ncolors=512, outfile="color_hist.txt"):
 
 
 if __name__ == "__main__":
+    PARSER = _make_parser()
     args = PARSER.parse_args()
     main(
         fname=args.img,
