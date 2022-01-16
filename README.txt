@@ -15,9 +15,7 @@
     'colors.txt' <-
     -> 'palette.png'
     # TODO:
-        refactor with `wand`, so as not to bloat dependencies
         documentation
-        remove hard-coded path to font
         option to read in json and put color names in output
     # STRETCH
         text colors from theme
