@@ -47,6 +47,15 @@ _XYZ = ["X", "Y", "Z"]
 _LUV = ["L", "U", "V"]
 
 
+def _exclude(
+    subset: pd.DataFrame,
+    exclude: pd.Series,
+    exclude_dist: float = 100.0,
+):
+    dist = subset[_LUV].apply(euclidean, v=exclude[_LUV], axis=1)
+    return subset[dist > exclude_dist]
+
+
 class Themer:
     _ref = hex_to_everything(
         pd.Series(
@@ -104,8 +113,12 @@ class Themer:
         mode: Callable = euclidean,
         bright_mode: int = 1,  # 0 = all, 1 = bright only, 2 = muted
         nearest: bool = True,
+        exclude: pd.Series = None,
+        exclude_dist: float = 100.0,
     ):
         colors = self._get_subset(bright_mode)
+        if exclude is not None:
+            colors = _exclude(colors, exclude, exclude_dist)
         dist = colors[_LUV].apply(mode, v=luv, axis=1)
         if nearest:
             return colors.loc[dist.idxmin()]
@@ -139,19 +152,26 @@ class Themer:
         elif mode == "bg":
             color = self.colors.iloc[0]
         elif mode == "accent":
-            color = self.colors.loc[
-                self._get_subset(self.BRIGHT)["sat"].idxmax()
-            ]
+            try:
+                subset = self._get_subset(self.BRIGHT)
+                subset = _exclude(subset, exclude=self._theme.loc["bg"])
+                color = self.colors.loc[subset["sat"].idxmax()]
+            except KeyError:
+                # We should never get here, but just in case...
+                raise ValueError("Must calculate 'bg' before 'accent'.")
         elif mode == "secondary":
             try:
                 color = self._measure(
                     self._theme.loc["accent", _LUV],
                     bright_mode=self.BRIGHT,
                     nearest=False,
+                    exclude=self._theme.loc["bg"],
                 )
             except KeyError:
                 # We should never get here, but just in case...
-                raise ValueError("Must calculate 'accent' before 'secondary'.")
+                raise ValueError(
+                    "Must calculate 'accent' and 'bg' before 'secondary'."
+                )
         else:
             raise NotImplementedError(f"Mode '{mode}' not implemented.")
         color.name = mode
