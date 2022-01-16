@@ -26,9 +26,10 @@ PARSER.add_argument(
 PARSER.add_argument(
     "-o",
     "--outfile",
-    default="colors.txt",
-    help="Each line is a unique theme color, provided as a HEX code. "
-    "Default: 'colors.txt'",
+    default="colors.json",
+    help="If extension is '.json', save as a one-line json with color names. "
+    "OR each line is a unique theme color, provided as a HEX code. "
+    "Default: 'colors.json'",
 )
 PARSER.add_argument(
     "-p",
@@ -251,7 +252,7 @@ class Themer:
                 "secondary",
             ]:
                 self._theme = self._theme.append(self._get_special(special))
-        return self._theme["hex"]
+        return self._theme["hex"].drop(["common", "mean"])
 
     def plot(self, mode="LUV", scale=30):
         x, y, z = list(mode)
@@ -271,11 +272,11 @@ class Themer:
 
         plt.show()
 
-    def save(self, fname="colors.txt"):
-        with open(fname, "wt") as outfile:
-            for color in self.theme.unique():
-                outfile.write(color)
-                outfile.write("\n")
+    def save(self, fname="colors.json"):
+        if fname.endswith(".json"):
+            self.theme.to_json(fname)
+        else:
+            self.theme.to_csv(fname, index=False, header=False)
 
 
 def main(args: argparse.Namespace):
