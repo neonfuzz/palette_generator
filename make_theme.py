@@ -3,7 +3,7 @@
 
 import argparse
 from pprint import pp
-from typing import Callable, Tuple
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -109,15 +109,14 @@ class Themer:
             ]
         raise ValueError(f"Unexpected value for `bright_mode`: {bright_mode}")
 
-    def _measure(
-        self,
-        luv: Tuple[float, float, float],
-        mode: Callable = euclidean,
-        bright_mode: int = 1,  # 0 = all, 1 = bright only, 2 = muted
-        nearest: bool = True,
-        exclude: pd.Series = None,
-        exclude_dist: float = 100.0,
-    ):
+    def _measure(self, luv: Tuple[float, float, float], **kwargs) -> pd.Series:
+        mode = kwargs.pop("mode", euclidean)
+        # bright_mode: 0 = all, 1 = bright only, 2 = muted
+        bright_mode = kwargs.pop("bright_mode", self.BRIGHT)
+        nearest = kwargs.pop("nearest", True)
+        exclude = kwargs.pop("exclude", None)  # pd.Series
+        exclude_dist = kwargs.pop("exclude_dist", 100.0)
+
         colors = self._get_subset(bright_mode)
         if exclude is not None:
             colors = _exclude(colors, exclude, exclude_dist)
@@ -158,9 +157,11 @@ class Themer:
                 subset = self._get_subset(self.BRIGHT)
                 subset = _exclude(subset, exclude=self._theme.loc["bg"])
                 color = self.colors.loc[subset["sat"].idxmax()]
-            except KeyError:
+            except KeyError as exc:
                 # We should never get here, but just in case...
-                raise ValueError("Must calculate 'bg' before 'accent'.")
+                raise ValueError(
+                    "Must calculate 'bg' before 'accent'."
+                ) from exc
         elif mode == "secondary":
             try:
                 color = self._measure(
@@ -169,71 +170,15 @@ class Themer:
                     nearest=False,
                     exclude=self._theme.loc["bg"],
                 )
-            except KeyError:
+            except KeyError as exc:
                 # We should never get here, but just in case...
                 raise ValueError(
                     "Must calculate 'accent' and 'bg' before 'secondary'."
-                )
+                ) from exc
         else:
             raise NotImplementedError(f"Mode '{mode}' not implemented.")
         color.name = mode
         return color
-
-    @property
-    def red(self) -> str:
-        return self.theme.loc["red"]
-
-    @property
-    def yellow(self) -> str:
-        return self.theme.loc["yellow"]
-
-    @property
-    def green(self) -> str:
-        return self.theme.loc["green"]
-
-    @property
-    def cyan(self) -> str:
-        return self.theme.loc["cyan"]
-
-    @property
-    def blue(self) -> str:
-        return self.theme.loc["blue"]
-
-    @property
-    def magenta(self) -> str:
-        return self.theme.loc["magenta"]
-
-    @property
-    def white(self) -> str:
-        return self.theme.loc["white"]
-
-    @property
-    def black(self) -> str:
-        return self.theme.loc["black"]
-
-    @property
-    def common(self) -> str:
-        return self.theme.loc["common"]
-
-    @property
-    def mean(self) -> str:
-        return self.theme.loc["mean"]
-
-    @property
-    def fg(self) -> str:
-        return self.theme.loc["fg"]
-
-    @property
-    def bg(self) -> str:
-        return self.theme.loc["bg"]
-
-    @property
-    def accent(self) -> str:
-        return self.theme.loc["accent"]
-
-    @property
-    def secondary(self) -> str:
-        return self.theme.loc["secondary"]
 
     @property
     def theme(self):
@@ -255,6 +200,9 @@ class Themer:
         return self._theme["hex"].drop(["common", "mean"])
 
     def plot(self, mode="LUV", scale=30):
+        # pylint: disable=invalid-name
+        # 'x', 'y', and 'z' are well-understood.
+        # 'ax' is commonly-used for matplotlib antics.
         x, y, z = list(mode)
         size = self.colors["count"] / self.colors["count"].mean() * scale
         fig = plt.figure()
