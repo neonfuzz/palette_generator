@@ -14,7 +14,7 @@ import argparse
 import pandas as pd
 from wand.image import Image
 
-from convert_colors import rgb_to_hex
+from .convert_colors import rgb_to_hex
 
 
 def _make_parser() -> argparse.ArgumentParser:

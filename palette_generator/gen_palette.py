@@ -15,7 +15,7 @@ import pandas as pd
 from wand.drawing import Drawing
 from wand.image import Image
 
-from convert_colors import hex_to_rgb, rgb_to_hsv
+from .convert_colors import hex_to_rgb, rgb_to_hsv
 
 
 # TODO: option for one-col vs two-col palette

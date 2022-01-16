@@ -20,7 +20,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial.distance import euclidean
 
-from convert_colors import cieluv_to_hex, hex_to_everything
+from .convert_colors import cieluv_to_hex, hex_to_everything
 
 
 def _make_parser() -> argparse.ArgumentParser:
