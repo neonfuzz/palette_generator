@@ -58,7 +58,8 @@ def make_parser(
         "-cf",
         "--color-file",
         default="colors.json",
-        help="If extension is '.json', save as a one-line json with color "
+        help="Save curated color theme here. "
+        "If extension is '.json', save as a one-line json with color "
         "names. OR each line is a unique theme color, provided as a HEX code. "
         "Default: 'colors.json'",
     )

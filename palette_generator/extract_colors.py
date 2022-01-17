@@ -44,7 +44,8 @@ def make_parser(
         "--n-colors",
         default=512,
         type=int,
-        help="The number of colors to extract. Default: 512",
+        help="The number of colors to extract from the raw image. "
+        "Default: 512",
     )
     parser.add_argument(
         "-hf",
