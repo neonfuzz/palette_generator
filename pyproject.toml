@@ -13,6 +13,9 @@ scipy = "^1.7.3"
 Wand = "@latest"
 
 [tool.poetry.dev-dependencies]
+Sphinx = "@latest"
+sphinx-argparse = "@latest"
+sphinx-rtd-dark-mode = "@latest"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
