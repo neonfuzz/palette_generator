@@ -9,6 +9,7 @@ Classes:
 
 Functions:
     * :func:`main`: run the script
+    * :func:`make_parser`: make the CLI parser
 """
 
 
@@ -23,29 +24,39 @@ from scipy.spatial.distance import euclidean
 from .convert_colors import cieluv_to_hex, hex_to_everything
 
 
-def _make_parser() -> argparse.ArgumentParser:
+def make_parser(
+    parser: argparse.ArgumentParser = None,
+) -> argparse.ArgumentParser:
     """
     Create a CLI parser.
+
+    Args:
+        parser (argparse.ArgumentParser): pre-existing parser to modify;
+            default: `None`
 
     Returns:
         argparse.ArgumentParser: argument parser
     """
-    parser = argparse.ArgumentParser(
-        description="Read a palette of colors, and turn it into a cohesive "
-        "12-color scheme. Prints suggested theme to screen and saves HEX "
-        "codes to file."
+    descr = (
+        "Read a palette of colors, and turn it into a cohesive  12-color "
+        "scheme. Prints suggested theme to screen and saves HEX  codes to "
+        "file."
     )
+    if parser is None:
+        parser = argparse.ArgumentParser(description=descr)
+    else:
+        parser.description = descr
     parser.add_argument(
-        "-i",
-        "--infile",
+        "-hf",
+        "--hist-file",
         default="color_hist.txt",
-        help="each line is '{N}: {C}' where {N} in the number of counts of "
-        "color {C}, which is provided as a HEX code. "
+        help="each line is '{N}: {C}' where {N} in the number of counts of"
+        " color {C}, which is provided as a HEX code. "
         "Default: 'color_hist.txt'",
     )
     parser.add_argument(
-        "-o",
-        "--outfile",
+        "-cf",
+        "--color-file",
         default="colors.json",
         help="If extension is '.json', save as a one-line json with color "
         "names. OR each line is a unique theme color, provided as a HEX code. "
@@ -366,12 +377,12 @@ def main(args: argparse.Namespace):
     Args:
         args (argparse.Namespace): arguments from running script in CLI
     """
-    theme = Themer(args.infile, p_mix=args.p_mix)
+    theme = Themer(args.hist_file, p_mix=args.p_mix)
     pp(theme.theme)
-    theme.save(args.outfile)
+    theme.save(args.color_file)
 
 
 if __name__ == "__main__":
-    PARSER = _make_parser()
+    PARSER = make_parser()
     ARGS = PARSER.parse_args()
     main(ARGS)

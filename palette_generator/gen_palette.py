@@ -3,6 +3,10 @@
 """
 Generate a palette image from a base image and set of colors.
 
+functions:
+    * :func:`main`: run the program with CLI-based arguments
+    * :func:`make_parser`: create the CLI parser
+
 classes:
     * :class:`Palette`: visual palette created on an image base
 """
@@ -19,24 +23,32 @@ from .convert_colors import hex_to_rgb, rgb_to_hsv
 
 
 # TODO: option for one-col vs two-col palette
-def _make_parser():
-    parser = argparse.ArgumentParser(
-        description="Given an image and a list of colors, generate a "
-        "graphical representation of their palette."
+def make_parser(
+    parser: argparse.ArgumentParser = None,
+) -> argparse.ArgumentParser:
+    """
+    Make a CLI-based argument parser.
+
+    Args:
+        parser (argparse.ArgumentParser): pre-existing parser to modify;
+            default: `None`
+
+    Returns:
+        argparse.ArgumentParser:
+    """
+    descr = (
+        "Given an image and a list of colors, generate a graphical "
+        "representation of their palette."
     )
-    parser.add_argument("img_path", help="The image.")
+    if parser is None:
+        parser = argparse.ArgumentParser(description=descr)
+    else:
+        parser.description = descr
     parser.add_argument(
-        "-c",
-        "--color_file",
-        default="colors.json",
-        help="The palette colors. Can read .json or a plain list of color "
-        "hex codes. Default: 'colors.json'",
-    )
-    parser.add_argument(
-        "-o",
-        "--outfile",
+        "-pf",
+        "--palette-file",
         default="palette.png",
-        help="The outfile. Default: 'palette.png'",
+        help="The palette file. Default: 'palette.png'",
     )
     parser.add_argument(
         "-ff",
@@ -66,7 +78,7 @@ class Palette:
     Args:
         img_path (str): path to image
         color_file (str): path to color file; default: 'colors.json'
-        outfile (str): path to saved image; default: 'palette.png'
+        palette_file (str): path to saved image; default: 'palette.png'
         cheight (int): height (in pixels) of a color swatch; default: 90
         cwidth (int): width (in pixels) of a color swatch; default: 180
         cwidth (int): margin (in pixels) between color swatches, also used for
@@ -78,7 +90,7 @@ class Palette:
     def __init__(self, img_path: str, **kwargs):
         """Initialize :class:`Palette`."""
         #: path to saved image
-        self.outfile = kwargs.pop("outfile", "palette.png")
+        self.palette_file = kwargs.pop("palette_file", "palette.png")
         #: height (in pixels) of a color swatch
         self.cheight = kwargs.pop("cheight", 90)
         #: width (in pixels) of a color swatch
@@ -118,9 +130,9 @@ class Palette:
         Save the palette to image file.
 
         Args:
-            fname (str): path to save; default: :const:`outfile`
+            fname (str): path to save; default: :const:`palette_file`
         """
-        fname = fname or self.outfile
+        fname = fname or self.palette_file
         self.image.save(filename=fname)
 
     def _scale_image(self):
@@ -245,8 +257,18 @@ class Palette:
         self._draw.text(text_x, text_y + v_offset, text)
 
 
+def main(args: argparse.Namespace):
+    """
+    Generate a visual palette from CLI-like arguments.
+
+    Args:
+        args (argparse.Namespace): arguments from CLI
+    """
+    palette = Palette(**vars(args))
+    palette.save()
+
+
 if __name__ == "__main__":
-    PARSER = _make_parser()
+    PARSER = make_parser()
     ARGS = PARSER.parse_args()
-    PALETTE = Palette(**vars(ARGS))
-    PALETTE.save()
+    main(ARGS)
