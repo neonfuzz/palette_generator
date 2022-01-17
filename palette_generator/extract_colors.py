@@ -46,11 +46,6 @@ def _make_parser() -> argparse.ArgumentParser:
     return parser
 
 
-FNAME = "nordic.png"
-N_COLORS = 512
-OUTFILE = "color_hist.txt"
-
-
 def main(fname: str, n_colors: int = 512, outfile: str = "color_hist.txt"):
     """
     Extract colors from an image.
