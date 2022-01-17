@@ -36,6 +36,7 @@ def make_parser(
         parser = argparse.ArgumentParser(description=descr)
     else:
         parser.description = descr
+    parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
     parser.add_argument(
         "img_path", help="The image file from which the palette is extracted."
     )
@@ -44,14 +45,13 @@ def make_parser(
         "--n-colors",
         default=512,
         type=int,
-        help="The number of colors to extract from the raw image. "
-        "Default: 512",
+        help="The number of colors to extract from the raw image. ",
     )
     parser.add_argument(
         "-hf",
         "--hist-file",
         default="color_hist.txt",
-        help="The color histogram output. Default: 'color_hist.txt'",
+        help="The color histogram output.",
     )
     return parser
 

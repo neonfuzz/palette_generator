@@ -13,6 +13,7 @@ def make_parser() -> argparse.ArgumentParser:
         argparse.ArgumentParser: said parser
     """
     parser = argparse.ArgumentParser()
+    parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
     subparsers = parser.add_subparsers(dest="mode")
     # extract_colors
     extract_sub = subparsers.add_parser("extract_colors")

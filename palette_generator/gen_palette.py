@@ -44,24 +44,18 @@ def make_parser(
         parser = argparse.ArgumentParser(description=descr)
     else:
         parser.description = descr
+    parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
     parser.add_argument(
         "-pf",
         "--palette-file",
         default="palette.png",
-        help="The palette file. Default: 'palette.png'",
+        help="The palette file.",
     )
     parser.add_argument(
-        "-ff",
-        "--font-family",
-        default="Sarabun",
-        help="Font family for text. Default: 'Sarabun'",
+        "-ff", "--font-family", default="Sarabun", help="Font family for text."
     )
     parser.add_argument(
-        "-fs",
-        "--font-size",
-        type=int,
-        default=28,
-        help="Font size for text. Default: 28",
+        "-fs", "--font-size", type=int, default=28, help="Font size for text."
     )
     return parser
 

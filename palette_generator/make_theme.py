@@ -46,13 +46,13 @@ def make_parser(
         parser = argparse.ArgumentParser(description=descr)
     else:
         parser.description = descr
+    parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
     parser.add_argument(
         "-hf",
         "--hist-file",
         default="color_hist.txt",
         help="each line is '{N}: {C}' where {N} in the number of counts of"
-        " color {C}, which is provided as a HEX code. "
-        "Default: 'color_hist.txt'",
+        " color {C}, which is provided as a HEX code. ",
     )
     parser.add_argument(
         "-cf",
@@ -60,8 +60,7 @@ def make_parser(
         default="colors.json",
         help="Save curated color theme here. "
         "If extension is '.json', save as a one-line json with color "
-        "names. OR each line is a unique theme color, provided as a HEX code. "
-        "Default: 'colors.json'",
+        "names. OR each line is a unique theme color, provided as a HEX code. ",
     )
     parser.add_argument(
         "-p",
@@ -72,7 +71,7 @@ def make_parser(
         "'yellow', 'green', 'cyan', 'blue', 'magenta', 'white', and 'black'. "
         "Recommend higher values for homogeneous images and lower values for "
         "heterogeneous images. Best results between 0.0 and 0.5. Use 0.0 for "
-        "colors true only to image. Default: 0.25",
+        "colors true only to image.",
     )
     return parser
 
