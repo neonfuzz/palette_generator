@@ -45,6 +45,10 @@ def make_parser(
     else:
         parser.description = descr
     parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
+    parser.add_argument("img_path", help="The image to create the palette on.")
+    parser.add_argument(
+        "-cf", "--color-file", default="colors.json", help="The color file."
+    )
     parser.add_argument(
         "-pf",
         "--palette-file",

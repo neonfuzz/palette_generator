@@ -37,9 +37,11 @@ def make_parser(
     else:
         parser.description = descr
     parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
-    parser.add_argument(
-        "img_path", help="The image file from which the palette is extracted."
-    )
+    if "img_path" not in parser.format_usage():
+        parser.add_argument(
+            "img_path",
+            help="The image file from which the palette is extracted.",
+        )
     parser.add_argument(
         "-nc",
         "--n-colors",

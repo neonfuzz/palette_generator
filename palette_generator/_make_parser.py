@@ -12,7 +12,7 @@ def make_parser() -> argparse.ArgumentParser:
     Returns:
         argparse.ArgumentParser: said parser
     """
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(prog="python -m palette_generator")
     parser.formatter_class = argparse.ArgumentDefaultsHelpFormatter
     subparsers = parser.add_subparsers(dest="mode")
     # extract_colors
