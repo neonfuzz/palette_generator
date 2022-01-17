@@ -215,8 +215,8 @@ class Themer:
         """
         Get best represention of a color.
 
-        Find the in-palette color closest to `ref` and mix it with the pure "
-        "color according to :attr:`p_mix` proportion.
+        Find the in-palette color closest to `ref` and mix it with the pure
+        color according to :attr:`p_mix` proportion.
 
         Args:
             ref (str): reference color e.g., "red"
@@ -255,7 +255,7 @@ class Themer:
         Returns:
             pd.Series: the queried color
         """
-        if mode == "common":
+        if mode == "common" or mode == "bg":
             color = self.colors.iloc[0]
         elif mode == "mean":
             color = self._measure(
@@ -267,8 +267,6 @@ class Themer:
                 bright_mode=self._MUTED,
                 nearest=False,
             )
-        elif mode == "bg":
-            color = self.colors.iloc[0]
         elif mode == "accent":
             try:
                 subset = self._get_subset(self._BRIGHT)
