@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>palette_generator package &mdash; palette_generator 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/dark_mode_css/general.css" type="text/css" />
+      <link rel="stylesheet" href="_static/dark_mode_css/dark.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/dark_mode_js/default_dark.js"></script>
+        <script src="_static/dark_mode_js/theme_switcher.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> palette_generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">palette_generator package</a><ul>
+<li><a class="reference internal" href="#summary">summary</a></li>
+<li><a class="reference internal" href="#module-palette_generator.convert_colors">palette_generator.convert_colors module</a></li>
+<li><a class="reference internal" href="#module-palette_generator.extract_colors">palette_generator.extract_colors module</a></li>
+<li><a class="reference internal" href="#module-palette_generator.gen_palette">palette_generator.gen_palette module</a></li>
+<li><a class="reference internal" href="#module-palette_generator.make_theme">palette_generator.make_theme module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">palette_generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>palette_generator package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/palette_generator.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="palette-generator-package">
+<h1>palette_generator package<a class="headerlink" href="#palette-generator-package" title="Permalink to this headline"></a></h1>
+<div class="section" id="summary">
+<h2>summary<a class="headerlink" href="#summary" title="Permalink to this headline"></a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-palette_generator.convert_colors" title="palette_generator.convert_colors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palette_generator.convert_colors</span></code></a></p></td>
+<td><p>Tools for converting between color spaces.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-palette_generator.extract_colors" title="palette_generator.extract_colors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palette_generator.extract_colors</span></code></a></p></td>
+<td><p>Extract a finite number of representative colors from an image.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#module-palette_generator.make_theme" title="palette_generator.make_theme"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palette_generator.make_theme</span></code></a></p></td>
+<td><p>Create a 12-color theme from a pre-computed palette.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#module-palette_generator.gen_palette" title="palette_generator.gen_palette"><code class="xref py py-obj docutils literal notranslate"><span class="pre">palette_generator.gen_palette</span></code></a></p></td>
+<td><p>Generate a palette image from a base image and set of colors.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="module-palette_generator.convert_colors">
+<span id="palette-generator-convert-colors-module"></span><h2>palette_generator.convert_colors module<a class="headerlink" href="#module-palette_generator.convert_colors" title="Permalink to this headline"></a></h2>
+<p>Tools for converting between color spaces.</p>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.hex_to_rgb" title="palette_generator.convert_colors.hex_to_rgb"><code class="xref py py-func docutils literal notranslate"><span class="pre">hex_to_rgb()</span></code></a>: hexadecimal to rgb</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.rgb_to_hex" title="palette_generator.convert_colors.rgb_to_hex"><code class="xref py py-func docutils literal notranslate"><span class="pre">rgb_to_hex()</span></code></a>: rgb to hexadecimal</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.rgb_to_hsv" title="palette_generator.convert_colors.rgb_to_hsv"><code class="xref py py-func docutils literal notranslate"><span class="pre">rgb_to_hsv()</span></code></a>: rgb to hsv</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.rgb_to_xyz" title="palette_generator.convert_colors.rgb_to_xyz"><code class="xref py py-func docutils literal notranslate"><span class="pre">rgb_to_xyz()</span></code></a>: rgb to xyz</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.xyz_to_rgb" title="palette_generator.convert_colors.xyz_to_rgb"><code class="xref py py-func docutils literal notranslate"><span class="pre">xyz_to_rgb()</span></code></a>: xyz to rgb</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.xyz_to_cieluv" title="palette_generator.convert_colors.xyz_to_cieluv"><code class="xref py py-func docutils literal notranslate"><span class="pre">xyz_to_cieluv()</span></code></a>: xyz to cie-luv</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.cieluv_to_xyz" title="palette_generator.convert_colors.cieluv_to_xyz"><code class="xref py py-func docutils literal notranslate"><span class="pre">cieluv_to_xyz()</span></code></a>: cie-luv to xyz</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.cieluv_to_hex" title="palette_generator.convert_colors.cieluv_to_hex"><code class="xref py py-func docutils literal notranslate"><span class="pre">cieluv_to_hex()</span></code></a>: cie-luv to hexadecimal</p></li>
+<li><p><a class="reference internal" href="#palette_generator.convert_colors.hex_to_everything" title="palette_generator.convert_colors.hex_to_everything"><code class="xref py py-func docutils literal notranslate"><span class="pre">hex_to_everything()</span></code></a>: hexadecimal to, well, everything</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.cieluv_to_hex">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">cieluv_to_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">luv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#palette_generator.convert_colors.cieluv_to_hex" title="Permalink to this definition"></a></dt>
+<dd><p>Convert CIE-LUV space to hexadecimal code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>luv</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – CIE-LUV space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>hexadecimal code</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.cieluv_to_xyz">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">cieluv_to_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">luv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#palette_generator.convert_colors.cieluv_to_xyz" title="Permalink to this definition"></a></dt>
+<dd><p>Convert CIE-LUV space to XYZ space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>luv</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – CIE-LUV space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>XYZ space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[float, float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.hex_to_everything">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">hex_to_everything</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hex_series</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pandas.core.series.Series</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="headerlink" href="#palette_generator.convert_colors.hex_to_everything" title="Permalink to this definition"></a></dt>
+<dd><p>Convert many hexadecimal codes to all available color spaces.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hex_series</strong> (<em>pd.Series</em>) – many hexadecimal codes</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>all color spaces in columns,</dt><dd><p>with same index as <cite>hex_series</cite></p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.hex_to_rgb">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">hex_to_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hex_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#palette_generator.convert_colors.hex_to_rgb" title="Permalink to this definition"></a></dt>
+<dd><p>Convert hexadecimal code to RGB space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>hex_code</strong> (<em>str</em>) – hexadecimal</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>RGB</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[int, int, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.rgb_to_hex">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">rgb_to_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rgb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#palette_generator.convert_colors.rgb_to_hex" title="Permalink to this definition"></a></dt>
+<dd><p>Convert RGB space to hexadecimal code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rgb</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>) – RGB space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>hexadecimal code</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.rgb_to_hsv">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">rgb_to_hsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rgb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#palette_generator.convert_colors.rgb_to_hsv" title="Permalink to this definition"></a></dt>
+<dd><p>Convert RGB space to HSV space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rgb</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>) – RGB space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>HSV space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[float, float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.rgb_to_xyz">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">rgb_to_xyz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rgb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#palette_generator.convert_colors.rgb_to_xyz" title="Permalink to this definition"></a></dt>
+<dd><p>Convert RGB space to XYZ space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rgb</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>, </em><em>int</em><em>]</em>) – RGB space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>XYZ space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[float, float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.xyz_to_cieluv">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">xyz_to_cieluv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#palette_generator.convert_colors.xyz_to_cieluv" title="Permalink to this definition"></a></dt>
+<dd><p>Convert XYZ space to CIE-LUV space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xyz</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – XYZ space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>CIE-LUV space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[float, float, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.convert_colors.xyz_to_rgb">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.convert_colors.</span></span><span class="sig-name descname"><span class="pre">xyz_to_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xyz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#palette_generator.convert_colors.xyz_to_rgb" title="Permalink to this definition"></a></dt>
+<dd><p>Convert XYZ space to RGB space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>xyz</strong> (<em>Tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – XYZ space</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>RGB space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[int, int, int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-palette_generator.extract_colors">
+<span id="palette-generator-extract-colors-module"></span><h2>palette_generator.extract_colors module<a class="headerlink" href="#module-palette_generator.extract_colors" title="Permalink to this headline"></a></h2>
+<p>Extract a finite number of representative colors from an image.</p>
+<dl class="simple">
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#palette_generator.extract_colors.main" title="palette_generator.extract_colors.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a>: extract colors from an image using CLI-style args</p></li>
+<li><p><a class="reference internal" href="#palette_generator.extract_colors.make_parser" title="palette_generator.extract_colors.make_parser"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_parser()</span></code></a>: create the CLI parser</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.extract_colors.main">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.extract_colors.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_colors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hist_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'color_hist.txt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.extract_colors.main" title="Permalink to this definition"></a></dt>
+<dd><p>Extract colors from an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img_path</strong> (<em>str</em>) – image file</p></li>
+<li><p><strong>n_colors</strong> (<em>int</em>) – number of colors to extract; default: 512</p></li>
+<li><p><strong>hist_file</strong> (<em>str</em>) – save counts and hex codes to this file;
+default: ‘color_hist.txt’</p></li>
+</ul>
+</dd>
+</dl>
+<p>Gobbles additional kwargs.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.extract_colors.make_parser">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.extract_colors.</span></span><span class="sig-name descname"><span class="pre">make_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">argparse.ArgumentParser</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">argparse.ArgumentParser</span></span></span><a class="headerlink" href="#palette_generator.extract_colors.make_parser" title="Permalink to this definition"></a></dt>
+<dd><p>Create a CLI parser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parser</strong> (<em>argparse.ArgumentParser</em>) – pre-existing parser to modify;
+default: <cite>None</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>argument parser</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>argparse.ArgumentParser</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-palette_generator.gen_palette">
+<span id="palette-generator-gen-palette-module"></span><h2>palette_generator.gen_palette module<a class="headerlink" href="#module-palette_generator.gen_palette" title="Permalink to this headline"></a></h2>
+<p>Generate a palette image from a base image and set of colors.</p>
+<dl class="simple">
+<dt>functions:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#palette_generator.gen_palette.main" title="palette_generator.gen_palette.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a>: run the program with CLI-based arguments</p></li>
+<li><p><a class="reference internal" href="#palette_generator.gen_palette.make_parser" title="palette_generator.gen_palette.make_parser"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_parser()</span></code></a>: create the CLI parser</p></li>
+</ul>
+</dd>
+<dt>classes:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#palette_generator.gen_palette.Palette" title="palette_generator.gen_palette.Palette"><code class="xref py py-class docutils literal notranslate"><span class="pre">Palette</span></code></a>: visual palette created on an image base</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.Palette">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">palette_generator.gen_palette.</span></span><span class="sig-name descname"><span class="pre">Palette</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.gen_palette.Palette" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Visual palette created on an image base.</p>
+<p>Overlay color samples on image across the left and right of the image. If
+the input is provided in ‘.json’ format, also label the hex codes with the
+names provided by the ‘.json’. If ‘fg’ and/or ‘bg’ are provided, they will
+be used as the text color for the labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img_path</strong> (<em>str</em>) – path to image</p></li>
+<li><p><strong>color_file</strong> (<em>str</em>) – path to color file; default: ‘colors.json’</p></li>
+<li><p><strong>palette_file</strong> (<em>str</em>) – path to saved image; default: ‘palette.png’</p></li>
+<li><p><strong>cheight</strong> (<em>int</em>) – height (in pixels) of a color swatch; default: 90</p></li>
+<li><p><strong>cwidth</strong> (<em>int</em>) – width (in pixels) of a color swatch; default: 180</p></li>
+<li><p><strong>cwidth</strong> – margin (in pixels) between color swatches, also used for
+corner radius; default: 10</p></li>
+<li><p><strong>font_family</strong> (<em>str</em>) – font to use; default: ‘Sarabun’ else system default</p></li>
+<li><p><strong>font_size</strong> (<em>int</em>) – font size for text; default: 28</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.Palette.cheight">
+<span class="sig-name descname"><span class="pre">cheight</span></span><a class="headerlink" href="#palette_generator.gen_palette.Palette.cheight" title="Permalink to this definition"></a></dt>
+<dd><p>height (in pixels) of a color swatch</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.Palette.cmargin">
+<span class="sig-name descname"><span class="pre">cmargin</span></span><a class="headerlink" href="#palette_generator.gen_palette.Palette.cmargin" title="Permalink to this definition"></a></dt>
+<dd><p>margin (in pixels) between color swatches, also used for radius</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.Palette.cwidth">
+<span class="sig-name descname"><span class="pre">cwidth</span></span><a class="headerlink" href="#palette_generator.gen_palette.Palette.cwidth" title="Permalink to this definition"></a></dt>
+<dd><p>width (in pixels) of a color swatch</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.Palette.palette_file">
+<span class="sig-name descname"><span class="pre">palette_file</span></span><a class="headerlink" href="#palette_generator.gen_palette.Palette.palette_file" title="Permalink to this definition"></a></dt>
+<dd><p>path to saved image</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.Palette.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.gen_palette.Palette.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the palette to image file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – path to save; default: <a class="reference internal" href="#palette_generator.gen_palette.Palette.palette_file" title="palette_generator.gen_palette.Palette.palette_file"><code class="xref py py-const docutils literal notranslate"><span class="pre">palette_file</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.Palette.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.gen_palette.Palette.show" title="Permalink to this definition"></a></dt>
+<dd><p>Not Implemented.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.main">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.gen_palette.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.gen_palette.main" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a visual palette from CLI-like arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>argparse.Namespace</em>) – arguments from CLI</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.gen_palette.make_parser">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.gen_palette.</span></span><span class="sig-name descname"><span class="pre">make_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">argparse.ArgumentParser</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">argparse.ArgumentParser</span></span></span><a class="headerlink" href="#palette_generator.gen_palette.make_parser" title="Permalink to this definition"></a></dt>
+<dd><p>Make a CLI-based argument parser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parser</strong> (<em>argparse.ArgumentParser</em>) – pre-existing parser to modify;
+default: <cite>None</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>argparse.ArgumentParser</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-palette_generator.make_theme">
+<span id="palette-generator-make-theme-module"></span><h2>palette_generator.make_theme module<a class="headerlink" href="#module-palette_generator.make_theme" title="Permalink to this headline"></a></h2>
+<p>Create a 12-color theme from a pre-computed palette.</p>
+<dl class="simple">
+<dt>Classes:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#palette_generator.make_theme.Themer" title="palette_generator.make_theme.Themer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Themer</span></code></a>: make a color theme from a palette</p></li>
+</ul>
+</dd>
+<dt>Functions:</dt><dd><ul class="simple">
+<li><p><a class="reference internal" href="#palette_generator.make_theme.main" title="palette_generator.make_theme.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a>: run the script</p></li>
+<li><p><a class="reference internal" href="#palette_generator.make_theme.make_parser" title="palette_generator.make_theme.make_parser"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_parser()</span></code></a>: make the CLI parser</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="palette_generator.make_theme.Themer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">palette_generator.make_theme.</span></span><span class="sig-name descname"><span class="pre">Themer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'color_hist.txt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_mix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.make_theme.Themer" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Make a color theme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> (<em>str</em>) – color histogram file; default: ‘color_hist.txt’</p></li>
+<li><p><strong>p_mix</strong> (<em>float</em>) – percent to mix pure colors in with histogram colors;
+default: 0.25</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="palette_generator.make_theme.Themer.colors">
+<span class="sig-name descname"><span class="pre">colors</span></span><a class="headerlink" href="#palette_generator.make_theme.Themer.colors" title="Permalink to this definition"></a></dt>
+<dd><p>colors loaded from <cite>fname</cite></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="palette_generator.make_theme.Themer.p_mix">
+<span class="sig-name descname"><span class="pre">p_mix</span></span><a class="headerlink" href="#palette_generator.make_theme.Themer.p_mix" title="Permalink to this definition"></a></dt>
+<dd><p>amount to mix pure colors with image colors</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="palette_generator.make_theme.Themer.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'LUV'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.make_theme.Themer.plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the palette’s colors, weighted by size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> (<em>3-len str</em><em> or </em><em>iterable</em>) – which color space to use;
+default: ‘LUV’</p></li>
+<li><p><strong>scale</strong> (<em>float</em>) – Degree by which to scale point size; default: 30.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="palette_generator.make_theme.Themer.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'colors.json'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.make_theme.Themer.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the theme to file.</p>
+<p>Can save in json format or text/csv format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>fname</strong> (<em>str</em>) – save path; will save in json format if <cite>fname</cite> ends
+with ‘.json’, else in csv format; default: ‘colors.json’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="palette_generator.make_theme.Themer.theme">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">theme</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pandas.core.series.Series</span></em><a class="headerlink" href="#palette_generator.make_theme.Themer.theme" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate and return the best-calculated theme for the palette.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>hex codes for each theme color</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pd.Series</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.make_theme.main">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.make_theme.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">argparse.Namespace</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#palette_generator.make_theme.main" title="Permalink to this definition"></a></dt>
+<dd><p>Execute the <a class="reference internal" href="#module-palette_generator.make_theme" title="palette_generator.make_theme"><code class="xref py py-mod docutils literal notranslate"><span class="pre">palette_generator.make_theme</span></code></a> script.</p>
+<p>Creates theme and saves it to file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>argparse.Namespace</em>) – arguments from running script in CLI</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="palette_generator.make_theme.make_parser">
+<span class="sig-prename descclassname"><span class="pre">palette_generator.make_theme.</span></span><span class="sig-name descname"><span class="pre">make_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">argparse.ArgumentParser</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">argparse.ArgumentParser</span></span></span><a class="headerlink" href="#palette_generator.make_theme.make_parser" title="Permalink to this definition"></a></dt>
+<dd><p>Create a CLI parser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parser</strong> (<em>argparse.ArgumentParser</em>) – pre-existing parser to modify;
+default: <cite>None</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>argument parser</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>argparse.ArgumentParser</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, neonfuzz.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
