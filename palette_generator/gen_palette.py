@@ -210,6 +210,9 @@ class Palette:
             bg_thresh = 0
             self._bg = "black"
 
+        if fg_thresh < bg_thresh:
+            self._fg, self._bg = self._bg, self._fg
+
         # Define the value threshold as between the two.
         self._color_thresh = np.mean([fg_thresh, bg_thresh])
 
