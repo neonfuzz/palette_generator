@@ -1,12 +1,37 @@
+"""
+Tools for converting between color spaces.
+
+Functions:
+    * :func:`hex_to_rgb`: hexadecimal to rgb
+    * :func:`rgb_to_hex`: rgb to hexadecimal
+    * :func:`rgb_to_hsv`: rgb to hsv
+    * :func:`rgb_to_xyz`: rgb to xyz
+    * :func:`xyz_to_rgb`: xyz to rgb
+    * :func:`xyz_to_cieluv`: xyz to cie-luv
+    * :func:`cieluv_to_xyz`: cie-luv to xyz
+    * :func:`cieluv_to_hex`: cie-luv to hexadecimal
+    * :func:`hex_to_everything`: hexadecimal to, well, everything
+"""
+
 from typing import Tuple
 
 import pandas as pd
 
 
 # pylint: disable=invalid-name
+# Though short, the names are well-understood.
 
 
 def hex_to_rgb(hex_code: str) -> Tuple[int, int, int]:
+    """
+    Convert hexadecimal code to RGB space.
+
+    Args:
+        hex_code (str): hexadecimal
+
+    Returns:
+        Tuple[int, int, int]: RGB
+    """
     hex_code = hex_code.strip("#")
     r, g, b = hex_code[:2], hex_code[2:4], hex_code[4:]
     r, g, b = int(r, 16), int(g, 16), int(b, 16)
@@ -14,10 +39,28 @@ def hex_to_rgb(hex_code: str) -> Tuple[int, int, int]:
 
 
 def rgb_to_hex(rgb: Tuple[int, int, int]) -> str:
+    """
+    Convert RGB space to hexadecimal code.
+
+    Args:
+        rgb (Tuple[int, int, int]): RGB space
+
+    Returns:
+        str: hexadecimal code
+    """
     return "#" + "".join([hex(c)[2:].upper().zfill(2) for c in rgb])
 
 
 def rgb_to_hsv(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
+    """
+    Convert RGB space to HSV space.
+
+    Args:
+        rgb (Tuple[int, int, int]): RGB space
+
+    Returns:
+        Tuple[float, float, float]: HSV space
+    """
     def delt_channel(vchannel):
         return (((vmax - vchannel) / 6) + (delt / 2)) / delt
 
@@ -41,6 +84,7 @@ def rgb_to_hsv(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
 
 
 def _var_rgb(channel: int) -> float:
+    """Help function for rgb->xyz."""
     channel /= 255
     if channel > 0.04045:
         return ((channel + 0.055) / 1.055) ** 2.4 * 100
@@ -48,6 +92,15 @@ def _var_rgb(channel: int) -> float:
 
 
 def rgb_to_xyz(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
+    """
+    Convert RGB space to XYZ space.
+
+    Args:
+        rgb (Tuple[int, int, int]): RGB space
+
+    Returns:
+        Tuple[float, float, float]: XYZ space
+    """
     vr, vg, vb = [_var_rgb(c) for c in rgb]
     x = vr * 0.4124 + vg * 0.3576 + vb * 0.1805
     y = vr * 0.2126 + vg * 0.7152 + vb * 0.0722
@@ -56,6 +109,7 @@ def rgb_to_xyz(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
 
 
 def _var_rgb_prime(var: float) -> int:
+    """Help function for xyz->rgb."""
     if var > 0.0031308:
         out = round((1.055 * (var ** (1 / 2.4)) - 0.055) * 255)
     else:
@@ -64,6 +118,15 @@ def _var_rgb_prime(var: float) -> int:
 
 
 def xyz_to_rgb(xyz: Tuple[float, float, float]) -> Tuple[int, int, int]:
+    """
+    Convert XYZ space to RGB space.
+
+    Args:
+        xyz (Tuple[float, float, float]): XYZ space
+
+    Returns:
+        Tuple[int, int, int]: RGB space
+    """
     vx, vy, vz = [c / 100 for c in xyz]
     vr = 3.2406 * vx - 1.5372 * vy - 0.4986 * vz
     vg = -0.9689 * vx + 1.8758 * vy + 0.0415 * vz
@@ -74,6 +137,15 @@ def xyz_to_rgb(xyz: Tuple[float, float, float]) -> Tuple[int, int, int]:
 def xyz_to_cieluv(
     xyz: Tuple[float, float, float]
 ) -> Tuple[float, float, float]:
+    """
+    Convert XYZ space to CIE-LUV space.
+
+    Args:
+        xyz (Tuple[float, float, float]): XYZ space
+
+    Returns:
+        Tuple[float, float, float]: CIE-LUV space
+    """
     x, y, z = xyz
     try:
         vu = (4 * x) / (x + (15 * y) + (3 * z))
@@ -97,6 +169,15 @@ def xyz_to_cieluv(
 def cieluv_to_xyz(
     luv: Tuple[float, float, float]
 ) -> Tuple[float, float, float]:
+    """
+    Convert CIE-LUV space to XYZ space.
+
+    Args:
+        luv (Tuple[float, float, float]): CIE-LUV space
+
+    Returns:
+        Tuple[float, float, float]: XYZ space
+    """
     l, u, v = luv
     vy = (l + 16) / 116
     vy = vy ** 3 if vy ** 3 > 0.008856 else (vy - 16 / 116) / 7.787
@@ -110,12 +191,31 @@ def cieluv_to_xyz(
 
 
 def cieluv_to_hex(luv: Tuple[float, float, float]) -> str:
+    """
+    Convert CIE-LUV space to hexadecimal code.
+
+    Args:
+        luv (Tuple[float, float, float]): CIE-LUV space
+
+    Returns:
+        str: hexadecimal code
+    """
     xyz = cieluv_to_xyz(luv)
     rgb = xyz_to_rgb(xyz)
     return rgb_to_hex(rgb)
 
 
 def hex_to_everything(hex_series: pd.Series) -> pd.DataFrame:
+    """
+    Convert many hexadecimal codes to all available color spaces.
+
+    Args:
+        hex_series (pd.Series): many hexadecimal codes
+
+    Returns:
+        pd.DataFrame: all color spaces in columns,
+            with same index as `hex_series`
+    """
     output = hex_series.copy()
     output.name = "hex"
 
