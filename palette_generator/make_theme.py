@@ -14,7 +14,6 @@ Functions:
 
 
 import argparse
-from pprint import pp
 from typing import Tuple
 
 import matplotlib.pyplot as plt
@@ -378,7 +377,6 @@ def main(args: argparse.Namespace):
         args (argparse.Namespace): arguments from running script in CLI
     """
     theme = Themer(args.hist_file, p_mix=args.p_mix)
-    pp(theme.theme)
     theme.save(args.color_file)
 
 
