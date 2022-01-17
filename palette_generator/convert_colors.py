@@ -33,8 +33,9 @@ def hex_to_rgb(hex_code: str) -> Tuple[int, int, int]:
         Tuple[int, int, int]: RGB
     """
     hex_code = hex_code.strip("#")
-    r, g, b = hex_code[:2], hex_code[2:4], hex_code[4:]
-    r, g, b = int(r, 16), int(g, 16), int(b, 16)
+    r = int(hex_code[:2], 16)
+    g = int(hex_code[2:4], 16)
+    b = int(hex_code[4:], 16)
     return r, g, b
 
 
@@ -85,10 +86,10 @@ def rgb_to_hsv(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
 
 def _var_rgb(channel: int) -> float:
     """Help function for rgb->xyz."""
-    channel /= 255
-    if channel > 0.04045:
-        return ((channel + 0.055) / 1.055) ** 2.4 * 100
-    return channel / 12.92 * 100
+    channel_float = channel/255
+    if channel_float > 0.04045:
+        return ((channel_float + 0.055) / 1.055) ** 2.4 * 100
+    return channel_float / 12.92 * 100
 
 
 def rgb_to_xyz(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
