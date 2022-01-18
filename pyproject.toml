@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "palette_generator"
-version = "0.1.1"
+version = "0.1.2"
 description = "`palette_generator` is here to turn your images into beautiful palettes"
 readme = "README.md"
 repository = "https://github.com/neonfuzz/palette_generator"
@@ -8,11 +8,11 @@ documentation = "https://neonfuzz.github.io/palette_generator/html/index.html"
 authors = ["neonfuzz"]
 
 [tool.poetry.dependencies]
-python = ">=3.10,<3.11"
+python = ">=3.7,<3.11"
 matplotlib = "@latest"
 numpy = "@latest"
 pandas = "@latest"
-scipy = "^1.7.3"
+scipy = "@latest"
 Wand = "@latest"
 
 [tool.poetry.dev-dependencies]
