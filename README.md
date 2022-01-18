@@ -2,7 +2,12 @@
 Installation
 ============
 
-`pip install .`
+`pip install palette_generator`
+
+Basic Usage
+===========
+
+`python -m palette_generator -h`
 
 Documentation
 =============

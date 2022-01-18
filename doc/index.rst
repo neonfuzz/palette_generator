@@ -38,7 +38,7 @@ Installation
 
 .. code-block:: sh
 
-    pip install .
+    pip install palette_generator
 
 Usage
 -----
