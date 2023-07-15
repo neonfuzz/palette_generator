@@ -308,7 +308,7 @@ class Themer:
             for ref in self._ref.index:
                 mode = self._MUTED if ref in muted else self._BRIGHT
                 color = self._get_mixed(ref, bright_mode=mode)
-                self._theme = self._theme.append(color)
+                self._theme = pd.concat([self._theme.T, color], axis=1).T
             for special in [
                 "common",
                 "mean",
@@ -317,7 +317,9 @@ class Themer:
                 "accent",
                 "secondary",
             ]:
-                self._theme = self._theme.append(self._get_special(special))
+                self._theme = pd.concat(
+                    [self._theme.T, self._get_special(special)], axis=1
+                ).T
         return self._theme["hex"].drop(["common", "mean"])
 
     def plot(self, mode: str = "LUV", scale: float = 30.0):
