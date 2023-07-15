@@ -1,7 +1,6 @@
 #!/bin/env python3
 
-"""
-Generate a palette image from a base image and set of colors.
+"""Generate a palette image from a base image and set of colors.
 
 functions:
     * :func:`main`: run the program with CLI-based arguments
@@ -26,8 +25,7 @@ from .convert_colors import hex_to_rgb, rgb_to_hsv
 def make_parser(
     parser: argparse.ArgumentParser = None,
 ) -> argparse.ArgumentParser:
-    """
-    Make a CLI-based argument parser.
+    """Make a CLI-based argument parser.
 
     Args:
         parser (argparse.ArgumentParser): pre-existing parser to modify;
@@ -65,8 +63,7 @@ def make_parser(
 
 
 class Palette:
-    """
-    Visual palette created on an image base.
+    """Visual palette created on an image base.
 
     Overlay color samples on image across the left and right of the image. If
     the input is provided in '.json' format, also label the hex codes with the
@@ -124,8 +121,7 @@ class Palette:
         #  self.image.show()
 
     def save(self, fname: str = None):
-        """
-        Save the palette to image file.
+        """Save the palette to image file.
 
         Args:
             fname (str): path to save; default: :const:`palette_file`
@@ -137,9 +133,7 @@ class Palette:
         """Scale image, in place, to palette size."""
         n_colors_per_col = int(np.ceil(len(self.colors) / 2))
         width, height = self.image.size
-        new_height = (
-            n_colors_per_col * (self.cheight + self.cmargin) + self.cmargin
-        )
+        new_height = n_colors_per_col * (self.cheight + self.cmargin) + self.cmargin
         scale = new_height / height
         new_width = int(scale * width)
         self.image.resize(new_width, new_height)
@@ -152,9 +146,7 @@ class Palette:
         y_pos = self._colors_drawn % n_colors_per_col
         width, _ = self.image.size
 
-        left = (
-            self.cmargin if x_pos == 0 else width - self.cmargin - self.cwidth
-        )
+        left = self.cmargin if x_pos == 0 else width - self.cmargin - self.cwidth
         top = self.cmargin + y_pos * (self.cheight + self.cmargin)
         label = (  # If colors have names, include them.
             None
@@ -173,8 +165,7 @@ class Palette:
         self._colors_drawn += 1
 
     def _draw_rect(self, left: int, top: int, color: str):
-        """
-        Draw a color swatch on the palette image.
+        """Draw a color swatch on the palette image.
 
         Args:
             left (int): left position, in pixels
@@ -215,8 +206,7 @@ class Palette:
         self._color_thresh = np.mean([fg_thresh, bg_thresh])
 
     def _get_font_color(self, color: str) -> str:
-        """
-        Find the best font color to label a color swatch.
+        """Find the best font color to label a color swatch.
 
         Args:
             color (str): the hexadecimal background of the swatch
@@ -229,11 +219,8 @@ class Palette:
             return self._fg
         return self._bg
 
-    def _draw_text(
-        self, text_x: int, text_y: int, color: str, label: str = None
-    ):
-        """
-        Overlay text on a color swatch.
+    def _draw_text(self, text_x: int, text_y: int, color: str, label: str = None):
+        """Overlay text on a color swatch.
 
         Args:
             text_x (int): x-position of text center, in pixels
@@ -259,8 +246,7 @@ class Palette:
 
 
 def main(args: argparse.Namespace):
-    """
-    Generate a visual palette from CLI-like arguments.
+    """Generate a visual palette from CLI-like arguments.
 
     Args:
         args (argparse.Namespace): arguments from CLI

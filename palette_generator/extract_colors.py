@@ -1,8 +1,7 @@
 #!/bin/env python3
 
 
-"""
-Extract a finite number of representative colors from an image.
+"""Extract a finite number of representative colors from an image.
 
 Functions:
     * :func:`main`: extract colors from an image using CLI-style args
@@ -21,8 +20,7 @@ from .convert_colors import rgb_to_hex
 def make_parser(
     parser: argparse.ArgumentParser = None,
 ) -> argparse.ArgumentParser:
-    """
-    Create a CLI parser.
+    """Create a CLI parser.
 
     Args:
         parser (argparse.ArgumentParser): pre-existing parser to modify;
@@ -59,13 +57,9 @@ def make_parser(
 
 
 def main(
-    img_path: str,
-    n_colors: int = 512,
-    hist_file: str = "color_hist.txt",
-    **kwargs
+    img_path: str, n_colors: int = 512, hist_file: str = "color_hist.txt", **kwargs
 ):
-    """
-    Extract colors from an image.
+    """Extract colors from an image.
 
     Args:
         img_path (str): image file
@@ -81,9 +75,7 @@ def main(
     # `dither` is important for generating counts that are more representative
     #   of human vision.
     img.quantize(n_colors, dither=True)
-    colors = pd.DataFrame(
-        img.histogram.items(), columns=["color_object", "count"]
-    )
+    colors = pd.DataFrame(img.histogram.items(), columns=["color_object", "count"])
     # Calculate hexadecimal codes from wand color objects.
     colors["hex"] = (
         colors["color_object"]

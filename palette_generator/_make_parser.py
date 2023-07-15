@@ -6,8 +6,7 @@ from . import make_theme
 
 
 def make_parser() -> argparse.ArgumentParser:
-    """
-    Make CLI parser which can call submodule parsers.
+    """Make CLI parser which can call submodule parsers.
 
     Returns:
         argparse.ArgumentParser: said parser

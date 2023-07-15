@@ -1,8 +1,7 @@
 #!/bin/env python3
 
 
-"""
-Create a 12-color theme from a pre-computed palette.
+"""Create a 12-color theme from a pre-computed palette.
 
 Classes:
     * :class:`Themer`: make a color theme from a palette
@@ -26,8 +25,7 @@ from .convert_colors import cieluv_to_hex, hex_to_everything
 def make_parser(
     parser: argparse.ArgumentParser = None,
 ) -> argparse.ArgumentParser:
-    """
-    Create a CLI parser.
+    """Create a CLI parser.
 
     Args:
         parser (argparse.ArgumentParser): pre-existing parser to modify;
@@ -86,8 +84,7 @@ def _exclude(
     exclude: pd.Series,
     exclude_dist: float = 100.0,
 ) -> pd.DataFrame:
-    """
-    Exclude a color and its neighbors from a DataFrame.
+    """Exclude a color and its neighbors from a DataFrame.
 
     Args:
         subset (pd.DataFrame): DataFrame of colors
@@ -103,8 +100,7 @@ def _exclude(
 
 
 class Themer:
-    """
-    Make a color theme.
+    """Make a color theme.
 
     Args:
         fname (str): color histogram file; default: 'color_hist.txt'
@@ -134,9 +130,7 @@ class Themer:
     def __init__(self, fname: str = "color_hist.txt", p_mix: float = 0.25):
         """Initialize :class:`Themer`."""
         colors = pd.read_csv(fname)
-        colors = colors.sort_values("count", ascending=False).reset_index(
-            drop=True
-        )
+        colors = colors.sort_values("count", ascending=False).reset_index(drop=True)
         #: colors loaded from `fname`
         self.colors = pd.merge(
             colors,
@@ -150,8 +144,7 @@ class Themer:
         self.p_mix = p_mix
 
     def _get_subset(self, bright_mode: int = 1) -> pd.DataFrame:
-        """
-        Get a subset of :attr:`self.colors`.
+        """Get a subset of :attr:`self.colors`.
 
         Args:
             bright_mode (int): one of :attr:`self._BRIGHT`,
@@ -178,8 +171,7 @@ class Themer:
         raise ValueError(f"Unexpected value for `bright_mode`: {bright_mode}")
 
     def _measure(self, luv: Tuple[float, float, float], **kwargs) -> pd.Series:
-        """
-        Find the closest (or farthest) color from given.
+        """Find the closest (or farthest) color from given.
 
         Args:
             luv (Tuple[float, float, float]): given color, in CIE-LUV space
@@ -212,8 +204,7 @@ class Themer:
         return colors.loc[dist.idxmax()]
 
     def _get_mixed(self, ref: str, **kwargs) -> pd.Series:
-        """
-        Get best represention of a color.
+        """Get best represention of a color.
 
         Find the in-palette color closest to `ref` and mix it with the pure
         color according to :attr:`p_mix` proportion.
@@ -238,8 +229,7 @@ class Themer:
         return mixed
 
     def _get_special(self, mode: str) -> pd.Series:
-        """
-        Get a specific theme color from the palette space.
+        """Get a specific theme color from the palette space.
 
         Args:
             mode (str): one of
@@ -258,9 +248,7 @@ class Themer:
         if mode == "common" or mode == "bg":
             color = self.colors.iloc[0]
         elif mode == "mean":
-            color = self._measure(
-                self.colors[_LUV].mean(), bright_mode=self._ALL
-            )
+            color = self._measure(self.colors[_LUV].mean(), bright_mode=self._ALL)
         elif mode == "fg":
             color = self._measure(
                 self.colors.iloc[0][_LUV],
@@ -274,9 +262,7 @@ class Themer:
                 color = self.colors.loc[subset["sat"].idxmax()]
             except KeyError as exc:
                 # We should never get here, but just in case...
-                raise ValueError(
-                    "Must calculate 'bg' before 'accent'."
-                ) from exc
+                raise ValueError("Must calculate 'bg' before 'accent'.") from exc
         elif mode == "secondary":
             try:
                 color = self._measure(
@@ -297,8 +283,7 @@ class Themer:
 
     @property
     def theme(self) -> pd.Series:
-        """
-        Calculate and return the best-calculated theme for the palette.
+        """Calculate and return the best-calculated theme for the palette.
 
         Returns:
             pd.Series: hex codes for each theme color
@@ -323,8 +308,7 @@ class Themer:
         return self._theme["hex"].drop(["common", "mean"])
 
     def plot(self, mode: str = "LUV", scale: float = 30.0):
-        """
-        Plot the palette's colors, weighted by size.
+        """Plot the palette's colors, weighted by size.
 
         Args:
             mode (3-len str or iterable): which color space to use;
@@ -352,8 +336,7 @@ class Themer:
         plt.show()
 
     def save(self, fname: str = "colors.json"):
-        """
-        Save the theme to file.
+        """Save the theme to file.
 
         Can save in json format or text/csv format.
 
@@ -368,8 +351,7 @@ class Themer:
 
 
 def main(args: argparse.Namespace):
-    """
-    Execute the :mod:`palette_generator.make_theme` script.
+    """Execute the :mod:`palette_generator.make_theme` script.
 
     Creates theme and saves it to file.
 

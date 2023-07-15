@@ -1,5 +1,4 @@
-"""
-Tools for converting between color spaces.
+"""Tools for converting between color spaces.
 
 Functions:
     * :func:`hex_to_rgb`: hexadecimal to rgb
@@ -23,8 +22,7 @@ import pandas as pd
 
 
 def hex_to_rgb(hex_code: str) -> Tuple[int, int, int]:
-    """
-    Convert hexadecimal code to RGB space.
+    """Convert hexadecimal code to RGB space.
 
     Args:
         hex_code (str): hexadecimal
@@ -40,8 +38,7 @@ def hex_to_rgb(hex_code: str) -> Tuple[int, int, int]:
 
 
 def rgb_to_hex(rgb: Tuple[int, int, int]) -> str:
-    """
-    Convert RGB space to hexadecimal code.
+    """Convert RGB space to hexadecimal code.
 
     Args:
         rgb (Tuple[int, int, int]): RGB space
@@ -53,8 +50,7 @@ def rgb_to_hex(rgb: Tuple[int, int, int]) -> str:
 
 
 def rgb_to_hsv(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
-    """
-    Convert RGB space to HSV space.
+    """Convert RGB space to HSV space.
 
     Args:
         rgb (Tuple[int, int, int]): RGB space
@@ -62,6 +58,7 @@ def rgb_to_hsv(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
     Returns:
         Tuple[float, float, float]: HSV space
     """
+
     def delt_channel(vchannel):
         return (((vmax - vchannel) / 6) + (delt / 2)) / delt
 
@@ -86,15 +83,14 @@ def rgb_to_hsv(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
 
 def _var_rgb(channel: int) -> float:
     """Help function for rgb->xyz."""
-    channel_float = channel/255
+    channel_float = channel / 255
     if channel_float > 0.04045:
         return ((channel_float + 0.055) / 1.055) ** 2.4 * 100
     return channel_float / 12.92 * 100
 
 
 def rgb_to_xyz(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
-    """
-    Convert RGB space to XYZ space.
+    """Convert RGB space to XYZ space.
 
     Args:
         rgb (Tuple[int, int, int]): RGB space
@@ -119,8 +115,7 @@ def _var_rgb_prime(var: float) -> int:
 
 
 def xyz_to_rgb(xyz: Tuple[float, float, float]) -> Tuple[int, int, int]:
-    """
-    Convert XYZ space to RGB space.
+    """Convert XYZ space to RGB space.
 
     Args:
         xyz (Tuple[float, float, float]): XYZ space
@@ -135,11 +130,8 @@ def xyz_to_rgb(xyz: Tuple[float, float, float]) -> Tuple[int, int, int]:
     return _var_rgb_prime(vr), _var_rgb_prime(vg), _var_rgb_prime(vb)
 
 
-def xyz_to_cieluv(
-    xyz: Tuple[float, float, float]
-) -> Tuple[float, float, float]:
-    """
-    Convert XYZ space to CIE-LUV space.
+def xyz_to_cieluv(xyz: Tuple[float, float, float]) -> Tuple[float, float, float]:
+    """Convert XYZ space to CIE-LUV space.
 
     Args:
         xyz (Tuple[float, float, float]): XYZ space
@@ -167,11 +159,8 @@ def xyz_to_cieluv(
     return cie_l, cie_u, cie_v
 
 
-def cieluv_to_xyz(
-    luv: Tuple[float, float, float]
-) -> Tuple[float, float, float]:
-    """
-    Convert CIE-LUV space to XYZ space.
+def cieluv_to_xyz(luv: Tuple[float, float, float]) -> Tuple[float, float, float]:
+    """Convert CIE-LUV space to XYZ space.
 
     Args:
         luv (Tuple[float, float, float]): CIE-LUV space
@@ -181,7 +170,7 @@ def cieluv_to_xyz(
     """
     l, u, v = luv
     vy = (l + 16) / 116
-    vy = vy ** 3 if vy ** 3 > 0.008856 else (vy - 16 / 116) / 7.787
+    vy = vy**3 if vy**3 > 0.008856 else (vy - 16 / 116) / 7.787
     vu = 0 if l == 0 else u / (13 * l)
     vv = 0 if l == 0 else v / (13 * l)
 
@@ -192,8 +181,7 @@ def cieluv_to_xyz(
 
 
 def cieluv_to_hex(luv: Tuple[float, float, float]) -> str:
-    """
-    Convert CIE-LUV space to hexadecimal code.
+    """Convert CIE-LUV space to hexadecimal code.
 
     Args:
         luv (Tuple[float, float, float]): CIE-LUV space
@@ -207,8 +195,7 @@ def cieluv_to_hex(luv: Tuple[float, float, float]) -> str:
 
 
 def hex_to_everything(hex_series: pd.Series) -> pd.DataFrame:
-    """
-    Convert many hexadecimal codes to all available color spaces.
+    """Convert many hexadecimal codes to all available color spaces.
 
     Args:
         hex_series (pd.Series): many hexadecimal codes
